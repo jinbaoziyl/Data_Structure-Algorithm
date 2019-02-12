@@ -1,8 +1,7 @@
 # subdir and objects in current dir
 SUBDIRS	= 
-OBJECTS	= ut_sort.o
-
-
+OBJECTS	= Ut_Sort.o 
+OBJECTS += Ut_YLinLib.o
 all:subdirs ${OBJECTS}
 
 	

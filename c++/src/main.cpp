@@ -1,14 +1,14 @@
-/*
-	入口函数
- */
+#include <stdio.h>
+#include <iostream>
 
-#include	<stdio.h>
+#include "../include/Ut_YLinLib.h"
+using namespace std;
 
-// ----------------------------------
-
-int main(int argc, char **argv)
+int main()
 {
-	printf("\n  ** main() finished\n\n");
+	int rval = SmartPointer_Test();
+
+	cout << "Reture Value: " << rval << endl;
 	return 0;	
 }
 
