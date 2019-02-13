@@ -1,4 +1,6 @@
 #include "../../include/SmartPointer.h"
+#include "../../include/Exception.h"
+#include "../../include/ArithmeticException.h"
 #include <iostream>
 
 using namespace std;
@@ -31,5 +33,24 @@ int SmartPointer_Test(void)
     return 0;
 }
 
-
+int Exception_Test(void)
+{    
+    try
+    {
+	THROW_EXCEPTION(ArithmeticException, "Test");
+    }
+    catch(ArithmeticException& e)
+    {
+	cout << "ArithmeticException" << endl;
+	cout << e.message() << endl;
+        cout << e.location() << endl; 
+    }
+    catch(Exception& e)
+    {
+        cout << "Exception" << endl;
+        cout << e.message() << endl;
+        cout << e.location() << endl;
+    }
+    return 0;
+}
 

@@ -3,6 +3,8 @@
 
 namespace YLinLib
 {
+#define THROW_EXCEPTION(e,m) (throw e(m, __FILE__, __LINE__))
+
 class Exception
 {
 protected:
@@ -21,7 +23,7 @@ public:
     virtual const char *message() const;
     virtual const char *location() const;
 
-    virtual ~Exception() = 0;   //表明是抽象基类, 纯虚函数的析构函数一般都是需要实现的，父类才能跟着释放内存
+    virtual ~Exception();   //表明是抽象基类, 纯虚函数的析构函数一般都是需要实现的，父类才能跟着释放内存
 };
 
 }
