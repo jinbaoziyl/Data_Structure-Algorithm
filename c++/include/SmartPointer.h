@@ -5,12 +5,14 @@
 */
 #ifndef __SMART_POINTER_H__
 #define __SMART_POINTER_H__
+#include "Object.h"
+
 #include <stdio.h>
 namespace YLinLib
 {
 
 template<typename T>
-class SmartPointer
+class SmartPointer : public Object
 {
 protected:
     T *m_pointer;
