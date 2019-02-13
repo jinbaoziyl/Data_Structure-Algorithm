@@ -2,7 +2,7 @@
 SUBDIRS	= 
 
 OBJECTS	= Exception.o
-
+OBJECTS	+= Object.o
 
 all:subdirs ${OBJECTS}
 
