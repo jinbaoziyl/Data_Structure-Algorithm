@@ -1,5 +1,5 @@
 # subdir and objects in current dir
-SUBDIRS	= unittest 
+SUBDIRS	= Unittest 
 SUBDIRS	+= YLinLib 
 
 OBJECTS	= main.o
