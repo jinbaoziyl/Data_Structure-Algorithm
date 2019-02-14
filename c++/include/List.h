@@ -10,7 +10,12 @@ namespace YLinLib
 template <typename T>
 class List : public Object  //抽象类
 {
-public：
+protected: //对于容器类型的类  可以考虑禁止拷贝构造和赋值操作
+    List(const List&);
+    List& operator= (const List&);
+public：  
+    List() {}  
+    virtual bool insert(const T& e) = 0;
     virtual bool insert(int i, const T& e) = 0;
     virtual bool remove(int i) = 0; 
     virtual bool get(int i, const T& e) const= 0;
