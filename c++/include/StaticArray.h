@@ -12,11 +12,12 @@ protected:
 public:
     StaticArray()
     {
-        m_array = m_space;
+        this->m_array = m_space;
     }
 
     StaticArray(const StaticArray<T, N>& obj)
     {
+        this->m_array = m_space;
         if(N == obj.length())
         {
             for(int i=0; i<length(); i++)
