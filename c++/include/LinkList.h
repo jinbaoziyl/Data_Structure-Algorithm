@@ -6,16 +6,29 @@ namespace YLinLib
 {
 
  template <typename T>
- class LinkList : public LinkList<T>
+ class LinkList : public List<T>
  {
 protected:
     struct Node : public Object
     {
-        char value[sizeof(T)];
+        T value;                 
         Node *next;
     };
-    mutable struct Node m_header;   //get函数 才能用地址(mutable关键字)
+    mutable struct : public Object{    //1. get函数才能用地址(mutable关键字) 2.禁止头结点调用泛指类型的构造函数
+        char value[sizeof(T)];         //静态内存，不需要构造泛指类型
+        Node *next;
+    }m_header;
+
     int m_length
+
+    virtual Node *create()
+    {
+        return new Node();
+    }
+    virtual destory(Node * pn)
+    {
+        delete pn;
+    }
 public:
     LinkList()
     {
@@ -41,12 +54,19 @@ public:
             }
 
             Node *p_new = new Node<T>();
-            memcpy(p_new->value, &e, sizeof(T));
 
-            p_new->next = m_target->next;
-            m_target->next = p_new;
+            if(p_new)
+            {
+                p_new->value = e;
+                p_new->next = m_target->next;
+                m_target->next = p_new;
 
-            m_length++;
+                m_length++;
+            }
+            else
+            {
+                THROW_EXCEPTION(NoEnoughMemoryException, "Out Of Index Bound...");
+            }
         }
         else
         {
