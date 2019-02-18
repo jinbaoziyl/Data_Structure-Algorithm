@@ -8,7 +8,7 @@ namespace YLinLib
 
 void Exception::init(const char* message, const char* file, int line)
 {
-    m_message = strdup(message);
+    m_message = (message ? strdup(message) : NULL);
 
     if(file != NULL)
     {

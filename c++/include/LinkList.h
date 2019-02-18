@@ -90,9 +90,11 @@ public:
 
             to_del = m_target->next;
             m_target->next = to_del->next;
-            delete to_del;
 
             m_length--;
+            delete to_del;
+
+            
         }
         else
         {
@@ -157,10 +159,10 @@ public:
         {
             target = m_header->next;
             m_header->next = target->next;
+
+            m_length--;
             delete target;
         }
-
-        m_length = 0;
     }
 
     ~LinkList()
