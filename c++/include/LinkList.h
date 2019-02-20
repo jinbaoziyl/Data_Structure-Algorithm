@@ -19,7 +19,26 @@ protected:
         Node *next;
     }m_header;
 
-    int m_length
+    int m_length;
+
+    Node *position(int i)
+    {
+        bool ret = (i>=0) && (i<m_length);
+        Node *cur = reinterpret_cast<Node*>(&m_header);
+        if(ret)
+        {
+            for(int j=0; j<i; j++)
+            {
+                cur = cur->next;
+            }
+
+            return cur;
+        }
+        else
+        {
+            THROW_EXCEPTION(IndexOutOfBoundsException, "Index out of bound...");
+        }
+    }
 
     virtual Node *create()
     {
@@ -44,7 +63,7 @@ public:
     bool insert(int i, const T& e) = 0;
     {
         bool ret = (i>=0) && (i<m_length);
-        Node *m_target = &m_header;
+        Node *m_target = reinterpret_cast<Node*>(&m_header);
 
         if(ret)
         {
@@ -79,7 +98,7 @@ public:
     bool remove(int i)
     {
         int ret = (i>=0) && (i<m_length);
-        Node *m_target = &m_header;
+        Node *m_target = reinterpret_cast<Node*>(&m_header);
         Node *to_del = NULL;
         if(ret)
         {
@@ -107,7 +126,7 @@ public:
     bool get(int i, const T& e) const
     {
         int ret = (i>=0) && (i<m_length);
-        Node *m_target = &m_header;
+        Node *m_target = reinterpret_cast<Node*>(&m_header);
         if(ret)
         {
             for(int j=0; j<i; j++)
@@ -128,7 +147,7 @@ public:
     bool set(int i, const T& e)
     {
         int ret = (i>=0) && (i<m_length);
-        Node *m_target = &m_header;
+        Node *m_target = reinterpret_cast<Node*>(&m_header);
         if(ret)
         {
             for(int j=0; j<i; j++)
