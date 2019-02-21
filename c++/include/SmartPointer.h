@@ -5,26 +5,24 @@
 */
 #ifndef __SMART_POINTER_H__
 #define __SMART_POINTER_H__
-#include "Object.h"
+#include "Pointer.h"
 
 #include <stdio.h>
 namespace YLinLib
 {
 
 template<typename T>
-class SmartPointer : public Object
+class SmartPointer : public Pointer
 {
-protected:
-    T *m_pointer;
 public:
-    SmartPointer(T *p = NULL)
+    SmartPointer(T *p = NULL) : Pointer<T>(p)
     {
-        m_pointer = p;
+
     }
 
     SmartPointer(const SmartPointer<T>& p)
     {
-        m_pointer = p.m_pointer;
+        this->m_pointer = p.m_pointer;
         const_cast<SmartPointer<T>&>(p).m_pointer = NULL;
     }
 
@@ -32,37 +30,19 @@ public:
     {
         if(this != &p)  // 判断是否是自赋值
         {
-            delete m_pointer; // 删除原有内存
+            T *p = m_pointer;  //放在后面 删除指针，异常安全
 
-            m_pointer = p.m_pointer; //实际赋值操作
+            this->m_pointer = p.m_pointer; //实际赋值操作
             const_cast<SmartPointer<T>&>(p).m_pointer = NULL;
+
+            delete p;
         }
         return *this;  // 返回自身，支持继续赋值
     }
 
-    T* operator-> ()
+    ~SmartPointer()  //该类不再是抽象类，需要实现纯虚析构函数
     {
-        return m_pointer;
-    }
-
-    T& operator* ()
-    {
-        return *m_pointer;
-    }
-
-    bool isNull()
-    {
-        return (m_pointer == NULL);
-    }
-
-    T* get()
-    {
-        return m_pointer;
-    }
-
-    ~SmartPointer()
-    {
-        delete m_pointer;
+        delete this->m_pointer;
     }
 };
 
