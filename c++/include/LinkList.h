@@ -123,7 +123,7 @@ public:
         return ret; 
     }
 
-    bool get(int i, const T& e) const
+    virtual bool get(int i, const T& e) const
     {
         int ret = (i>=0) && (i<m_length);
         Node *m_target = reinterpret_cast<Node*>(&m_header);
