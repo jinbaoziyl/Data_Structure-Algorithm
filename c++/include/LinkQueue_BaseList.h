@@ -7,12 +7,12 @@
 namespace YLinLib
 {
 template <typename T>
-class LinkQueue : public Queue<T>
+class LinkQueue_BaseList : public Queue<T>
 {
 protected:
     LinkList<T> m_list;
 public:
-    LinkQueue()
+    LinkQueue_BaseList()
     {
 
     }
