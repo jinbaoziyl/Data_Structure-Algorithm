@@ -1,36 +1,27 @@
-/*   1.使用原生数组作为队列存储空间
-     2.模板参数决定队列的最大容量
-*/
-#ifndef __STATIC_QUEUE_H__
-#define __STATIC_QUEUE_H__
+#ifndef __LINK_STACK_H__
+#define __LINK_STACK_H__
 #include "Queue.h"
 #include "Exception.h"
+#include "LinkList.h"
 
 namespace YLinLib
 {
-template <typename T, int N>
-class StaticQueue : public Queue
+template <typename T>
+class LinkQueue : public Queue<T>
 {
 protected:
-    T m_space[N];
-    int m_front;
-    int m_rear;
-    int m_length;
+    LinkList<T> m_list;
 public:
-    StaticQueue()
+    LinkQueue()
     {
-        m_front = 0;
-        m_rear = 0;
-        m_length = 0;
+
     }
 
     void add(const T& e)
     {
         if(m_length < N)
         {
-            m_space[m_rear] = N;
-            m_rear = (m_rear + 1) % N;
-            m_length++;
+            m_list.insert(e);
         }
         else
         {
@@ -42,8 +33,7 @@ public:
     {
         if(m_length > 0)
         {
-            m_front = (m_front + 1) % N;
-            m_length--;
+            m_list.remove(0);
         }
         else
         {
@@ -55,7 +45,7 @@ public:
     {
         if(m_length > 0)
         {
-            return m_space[m_front];
+            return m_list.get(0);
         }
         else
         {
@@ -63,24 +53,19 @@ public:
         }        
     }
 
-    int capacity() const
-    {
-        return N;
-    }
 
     void clear()
     {
-        m_front = 0;
-        m_rear = 0;
-        m_length = 0;       
+        m_list.clear();
     }
 
     int length() const
     {
-        return m_length;
+        return m_list.length();
     }
 };
 
 }
 
-#endif //__STATIC_QUEUE_H__
+
+#endif   //__LINK_STACK_H__
