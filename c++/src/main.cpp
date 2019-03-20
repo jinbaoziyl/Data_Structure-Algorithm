@@ -15,7 +15,8 @@ int main()
 	rval |= Exception_Test();
 	cout << "Reture Value: " << rval << endl;
 
-	cin >> "[Recursive-Sum] Please input a number: " >> n;
+	cout << "[Recursive-Sum] Please input a number: " 
+	cin >> n;
 	val_sum = Sum(n);
 	cout << "The Sum of n is:  " << val_sum << endl;
 
