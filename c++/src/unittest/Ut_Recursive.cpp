@@ -122,3 +122,24 @@ void permutation(char *s, char* e)
         }
     }
 }
+
+// 回溯算法，经典问题: 八皇后问题
+void findQueen(int row)
+{
+    if(row > 7)
+    {
+        total++;       //打印解法总数
+        printQueens(); //打印八皇后的解
+        return;
+    }
+
+    for(int column=0; column<8; column++)  //回溯列，递归下一行
+    {
+        if(check(row, column))   //check()函数判断当前位置能否放下皇后
+        {
+            arry[row][column] = 1;
+            findQueen(row+1);
+            arry[row][column] = 0;  //递归下一行返回的情况，只有:行还没到7行，但是已经放不下皇后。 清零的目的: 避免脏数据干扰(它只有在皇后摆不下去的时候会执行清0的动作)
+        }
+    }
+}
