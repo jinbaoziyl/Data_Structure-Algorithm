@@ -6,6 +6,46 @@ namespace YLinLib
 template <typename T>
 class GTree : public Tree
 {
+protected:
+    GTreeNode<T>* find(GTreeNode<T>*node, const T& val) const
+    {
+        GTreeNode<T>*ret = NULL;
+
+        if(node  != NULL)
+        {
+            if(node->value == val)
+            {
+                return node;
+            }
+            else
+            {
+                for(node->child.move(0), !node->end()&&(ret == NULL); node->child.next()) //遍历当前节点的每一个字树
+                {
+                    ret = find(node->child.current(), val);
+                }
+            }
+        }
+    }
+    GTreeNode<T>* find(GTreeNode<T>*node, GTreeNode<T>*obj) const
+    {
+        GTreeNode<T>*ret = NULL;
+
+        if(node  != NULL)
+        {
+            if(node == obj)
+            {
+                return node;
+            }
+            else
+            {
+                for(node->child.move(0), !node->end()&&(ret == NULL); node->child.next()) //遍历当前节点的每一个字树
+                {
+                    ret = find(node->child.current(), obj);
+                }
+            }
+        }
+    }
+public:
     bool insert(TreeNode<T> *node)
     {
         bool ret = true;
@@ -26,13 +66,13 @@ class GTree : public Tree
     {
         return NULL;
     }
-    GTreeNode<T>* find(const T& value) const
+    GTreeNode<T>* find(const T& value) const //基于元素值的查找
     {
-        return NULL;
+        return find(root(), value);
     }
-    GTreeNode<T>* find(TreeNode<T>* node) const
+    GTreeNode<T>* find(TreeNode<T>* node) const //基于节点的查找
     {
-        return NULL;
+        return find(root(), dynamic_cast<GTreeNode<T>*>(node));
     }
     TreeNode<T> *root() const
     {
