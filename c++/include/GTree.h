@@ -49,13 +49,56 @@ public:
     bool insert(TreeNode<T> *node)
     {
         bool ret = true;
-
+        if(node != NULL)
+        {
+            if(this->m_root == NULL)
+            {
+                node->parent = NULL;
+                this->m_root = node;
+            }
+            else
+            {
+                GTreeNode<T>* np = find(node->parent);
+                if( np != NULL)
+                {
+                    GTreeNode<T> *n = dynamic_cast<GTreeNode<T>*>(node);
+                    if( np->child.find(n) < 0)  //当前查找的节点，不在当前树中; 只需要保证查找到的父节点，它的子节点中是否有当前节点
+                    {
+                        np->child.insert(n);
+                    }
+                    else
+                    {
+                      THROW_EXCEPTION(InvalidParameterException, "Parameter parent node can no already exist...");  
+                    }
+                }
+                else
+                {
+                    THROW_EXCEPTION(InvalidParameterException, "Parameter parent node can no be null...");
+                }
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidParameterException, "Parameter node can not be null...");
+        }
         return ret;
     }
-    bool insert(const T& value, TreeNode<T>* parent)
+    bool insert(const T& value, TreeNode<T>* parent)   //插入数据元素，需要指定父节点
     {
         bool ret = true;
+        GTreeNode<T>* node = new GTreeNode<T>();
 
+        if(node != NULL)
+        {
+            node->value = value;
+            node->parent = parent;
+
+            insert(node);
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No Memory to alloc node...");
+        }
         return ret;
     }
     SharedPointer< Tree<T> > remove(const T& value)  //删除的节点及其递归的子树，一起返回智能指针
