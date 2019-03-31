@@ -86,6 +86,89 @@ protected:
             ret->m_root = node;
         }
     }
+   /*
+                         ---- return 0;             node == NULL
+                        |
+        count(node) ---------return 1;              node != NULL
+                        |
+                         ---- count(node->child)+1; node->child.length>0
+    */
+    int count(GTreeNode<T>*node) const
+    {
+        int ret = 0;
+        if(node == NULL)
+        {
+            return 0;
+        }
+        else if(node->child.length == 0)
+        {
+            return 1;
+        }
+        else
+        {
+            ret = 1;
+            for(node->child.move(0); !node->child.end();node->child.next())
+            {
+                ret += count(node->child.current());
+            }
+        }
+        return ret;
+    }   
+
+   /*
+                         ---- return 0;  node == NULL
+                        |
+        height(node) --------- return 1;  node->child.length == 0
+                        |
+                         ---- MAX{height(node->child)}+1; node->child.length>0
+    */
+    int height(GTreeNode<T>*node) const 
+    {
+        int ret = 0;
+        if(node != NULL)
+        {
+            for(node->child.move(0); !node->child.end();node->child.next())
+            {
+                int h = height(node->child.current());
+
+                if(ret < h)
+                {
+                    ret = h;
+                }
+            }
+            
+            ret = ret + 1;
+        }
+
+        return ret;
+    }
+
+   /*
+                         ---- return 0;  node == NULL
+                        |
+        degree(node) ----
+                        |
+                         ---- MAX{degree(node->child), node->child.length}; node->child.length>0
+    */
+    int degree(GTreeNode<T>*node) const 
+    {
+        int ret = 0;
+        if(node != NULL)
+        { 
+            for(node->child.move(0); !node->child.end();node->child.next())
+            {
+                ret = node->child.length();
+                int d = degree(node->child.current());
+
+                if(ret < d)
+                {
+                    ret = d;
+                }
+            }
+        }
+
+        return ret;
+    }    
 public:
     bool insert(TreeNode<T> *node)
     {
@@ -184,17 +267,19 @@ public:
     {
         return dynamic_cast<GTreeNode<T>*>(m_root);
     }
+
+    //树的属性: 都是运用递归的思想
     int degree() const
     {
-        return 0;
+        return degree(root());
     }
     int count() const
     {
-        return 0;
+        return count(root());
     }
     int height() const
     {
-        return 0;
+        return height(root());
     }
     void clear()
     {
