@@ -18,6 +18,8 @@ class GTreeNode : public TreeNode
 protected:
     bool m_flag;
 
+    GTreeNode(const GTreeNode<T>&);
+    GTreeNode<T>& operator = (const GTreeNode<T&);
     //重载new操作符
     void* operator new(unsigned int size) throw()
     {

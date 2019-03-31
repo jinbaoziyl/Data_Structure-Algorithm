@@ -1,5 +1,9 @@
 #ifndef __GTREE_H__
 #define __GTREE_H__
+#include "Tree.h"
+#include "GTreeNode.h"
+#include "Exception.h"
+#include "LinkQueue.h"
 
 namespace YLinLib
 {
@@ -7,6 +11,7 @@ template <typename T>
 class GTree : public Tree
 {
 protected:
+    LinkQueue<T> m_queue;
     GTreeNode<T>* find(GTreeNode<T>*node, const T& val) const
     {
         GTreeNode<T>*ret = NULL;
@@ -285,8 +290,55 @@ public:
     {
         free(root());
         this->m_root = NULL;
+
+        m_queue.clear();
     }
 
+    bool begin()
+    {
+        bool ret = (root() != NULL);
+        if(ret)
+        {
+            m_queue.clear();
+            m_queue.add(root());
+        }
+        return ret;
+    }
+
+    bool end()  //队列中没有数据 那么说明遍历结束
+    {
+        return (m_queue.length == 0);
+    }
+
+    bool next()
+    {
+        bool ret = (m_queue.length > 0);
+
+        if(ret)
+        {
+            GTreeNode<T> *node = m_queue.front();
+            m_queue.remove();
+
+            for(node->child.move(0); !node->child.end(); node->child.next())
+            {
+                m_queue.add(node->child.current());
+            }
+        }
+
+        return ret;
+    }
+
+    T current()
+    {
+        if( !end() )  //遍历是否结束
+        {
+            return m_queue.front()->value;
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidParameterException,"No value at this position....");
+        }
+    }
     ~GTree()
     {
         clear();
