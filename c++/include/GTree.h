@@ -45,6 +45,24 @@ protected:
             }
         }
     }
+
+    void free(GTreeNode<T>*node)
+    {
+        if(node != NULL)
+        {
+            for(node->child.move(0); node->child.end();node->child.next())//先递归清空字树的节点,再释放自己
+            {
+               free(node.child.current()); 
+            }
+
+            if(node->flag())   //是否堆空间
+                delete node;
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidParameterException, "Parameter node can no be NULL...");  
+        }
+    }
 public:
     bool insert(TreeNode<T> *node)
     {
@@ -86,7 +104,7 @@ public:
     bool insert(const T& value, TreeNode<T>* parent)   //插入数据元素，需要指定父节点
     {
         bool ret = true;
-        GTreeNode<T>* node = new GTreeNode<T>();
+        GTreeNode<T>* node = GTreeNode<T>::NewNode();  //使用工厂方法
 
         if(node != NULL)
         {
@@ -135,6 +153,7 @@ public:
     }
     void clear()
     {
+        free(root());
         this->m_root = NULL;
     }
 
