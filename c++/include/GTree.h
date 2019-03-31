@@ -63,6 +63,29 @@ protected:
             THROW_EXCEPTION(InvalidParameterException, "Parameter node can no be NULL...");  
         }
     }
+    void remove(GTreeNode<T>*node, GTree<T>* &ret)
+    {
+        ret = new GTree<T>();
+        if(ret == NULL)
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No Memory");
+        }
+        else
+        {
+            if(root() == node)
+            {
+                this->m_root = NULL;
+            }
+            else
+            {
+                LinkList<GTreeNode<T>*>child = dynamic_cast<GTreeNode<T>*>(node->parent)->child;
+                child.remove(child.find(node));
+                node->parent = NULL;
+            }
+
+            ret->m_root = node;
+        }
+    }
 public:
     bool insert(TreeNode<T> *node)
     {
@@ -119,13 +142,35 @@ public:
         }
         return ret;
     }
-    SharedPointer< Tree<T> > remove(const T& value)  //删除的节点及其递归的子树，一起返回智能指针
+
+    /*当需要从函数中返回堆中的对象时，使用函数指针作为返回值*/
+    SharedPointer< Tree<T> > remove(const T& value)  //删除的节点及其递归的子树
     {
-        return NULL;
+        GTree<T>* ret = NULL;
+        GTreeNode<T>* node = find(value);
+        if(node == NULL)
+        {
+            THROW_EXCEPTION(InvalidParameterException,"can not find value...");
+        }
+        else
+        {
+            remove(node, ret);
+        }
+        return ret;
     }
     SharedPointer< Tree<T> > remove(TreeNode<T>* node)
     {
-        return NULL;
+        GTree<T>* ret = NULL;
+        node = find(node);
+        if(node == NULL)
+        {
+            THROW_EXCEPTION(InvalidParameterException,"can not find node...");
+        }
+        else
+        {
+            remove(dynamic_cast<GTreeNode *>(node), ret);
+        }
+        return ret;
     }
     GTreeNode<T>* find(const T& value) const //基于元素值的查找
     {
