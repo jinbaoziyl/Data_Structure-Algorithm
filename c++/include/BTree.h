@@ -8,6 +8,47 @@ namespace YLinLib
 template <typename T>
 class BTree: public Tree
 {
+protected:
+    BTreeNode<T>* find(BTreeNode<T>* node,const T& value) const 
+    {
+        BTreeNode<T>* ret = NULL;
+        if(node != NULL)
+        {
+            if(node->value == value)
+            {
+                ret = node;
+            }
+            else
+            {
+                if(ret == NULL)
+                    ret = find(node->left, value);
+                if(ret == NULL)
+                    ret = find(node->right,value);
+            }
+        }
+        return ret;
+    }
+
+    BTreeNode<T>* find(BTreeNode<T>* node,BTreeNode<T>* obj) const 
+    {
+        BTreeNode<T>* ret = NULL;
+        if(node != obj)
+        {
+            if(node == obj)
+            {
+                ret = node;
+            }
+            else
+            {
+                if(ret == NULL)
+                    ret = find(node->left, value);
+                if(ret == NULL)
+                    ret = find(node->right,value);
+            }
+        }
+
+        return ret;
+    }
 public:
     bool insert(TreeNode<T> *node)
     {
@@ -25,13 +66,13 @@ public:
     {
 
     }
-    TreeNode<T>* find(const T& value) const 
+    BTreeNode<T>* find(const T& value) 
     {
-
+        return find(root(),value);
     }
-    TreeNode<T>* find(TreeNode<T>* node) 
+    BTreeNode<T>* find(TreeNode<T>* node) 
     {
-
+        return find(root(),node);
     }
     TreeNode<T> *root()
     {
