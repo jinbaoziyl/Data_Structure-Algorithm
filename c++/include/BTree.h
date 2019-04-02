@@ -124,7 +124,92 @@ protected:
             PreOrderTraversal(node->right, queue);
             queue.add(node);
         }
-    }    
+    } 
+
+    BTreeNode<T> *clone(BTreeNode<T> *node, LinkQueue<BTreeNode<T>* >&queue)
+    {
+        BTreeNode<T> *ret = NULL;
+        if(node != NULL)
+        { 
+            ret = BTreeNode<T>::NewNode();
+
+            if(ret != NULL)
+            {
+                ret->value = node->value;
+
+                ret->left = clone(node->left);
+                ret->right = clone(node->right);
+
+                if(ret->left != NULL)
+                {
+                    ret->left->parent = ret;
+                }
+                if(ret->right != NULL)
+                {
+                    ret->right->parent = ret;
+                }
+            }
+            else
+            {
+                THROW_EXCEPTION(NoEnoughMemoryException, "No Memory to alloc...");
+            }
+        }
+    }  
+
+    bool equal(BTreeNode<T>* lh, BTreeNode<T>* rh)
+    {
+        if(lh == rh)
+        {
+            return true;
+        }
+        else if(lh != NULL   &&  rh != NULL)
+        {
+            return (lh->value == rh->value) && equal(lh->right, rh->right)&& equal(lh->left, rh->left);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    BTreeNode<T>* add(BTreeNode<T>*lh, BTreeNode<T>*rh) const
+    {
+        BTreeNode<T>* ret = NULL;
+
+        if( (lh == NULL) && (rh != NULL))
+        {
+            ret = clone(rh);
+        }
+        else if( (lh != NULL) && (rh == NULL))
+        {
+            ret = clone(lh);
+        }
+        else if((lh != NULL) && (rh != NULL))
+        {
+            ret = BTreeNode<T>::NewNode();
+
+            if(ret != NULL)
+            {
+                ret->value = lh->value + rh->value;
+
+                ret->left = add(lh->left, rh->left);
+                ret->right = add(lh->right, lh->right);
+
+                if( ret->left != NULL)
+                {
+                    ret->left->parent = ret;
+                }
+                if(ret->right != NULL)
+                {
+                    ret->right->parent = ret;
+                }
+            }
+            else
+            {
+                THROW_EXCEPTION(NoEnoughMemoryException, "No Memory to alloc...");
+            }
+        }
+    }
 public:
     bool insert(TreeNode<T> *node)
     {
@@ -259,6 +344,43 @@ public:
         return ret;
     }
 
+    SharedPointer< BTree<T>> clone() const
+    {
+        BTree<T>* ret = new BTree<T>();
+        if(ret != NULL)
+        {
+            ret->m_root = clone(root());
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException,"No Memory to alloc...");
+        }
+
+        return ret;
+    }
+
+    bool operator == (const BTree<T>& btree)
+    {
+        return equal(root(), btree.root());
+    }
+    bool operator != (const BTree<T>& btree)
+    {
+        return !(*this == btree);
+    }
+
+    SharedPointer<BTree<T>> add(const BTree<T>& btree)const
+    {
+        BTree<T>* ret = new BTree<T>();
+
+        if(ret != NULL)
+        {
+            ret->m_root = add();
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidParameterException, "Parameter order is invalid...");    
+        }
+    }
     ~BTree()
     {
         clear();
