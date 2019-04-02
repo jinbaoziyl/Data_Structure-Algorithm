@@ -4,6 +4,12 @@
 
 namespace YLinLib
 {
+enum BTTraversal
+{
+    PreOder,
+    InOrder,
+    PostOrder
+}
 
 enum BTNodePos
 {
@@ -92,6 +98,33 @@ protected:
 
         return ret;
     }
+    void preOrderTraversal(BTreeNode<T>*node, LinkQueue<BTreeNode<T>* >&queue)
+    {
+        if(node != NULL)
+        {
+            queue.add(node);
+            PreOrderTraversal(node->left, queue);
+            PreOrderTraversal(node->right, queue);
+        }
+    }
+    void inOrderTraversal(BTreeNode<T>*node, LinkQueue<BTreeNode<T>* >&queue)
+    {
+        if(node != NULL)
+        {
+            PreOrderTraversal(node->left, queue);
+            queue.add(node);
+            PreOrderTraversal(node->right, queue);
+        }
+    }
+    void PostOrderTraversal(BTreeNode<T>*node, LinkQueue<BTreeNode<T>* >&queue)
+    {
+        if(node != NULL)
+        {
+            PreOrderTraversal(node->left, queue);
+            PreOrderTraversal(node->right, queue);
+            queue.add(node);
+        }
+    }    
 public:
     bool insert(TreeNode<T> *node)
     {
@@ -190,6 +223,41 @@ public:
     {
 
     }  
+
+    SharedPointer< Array<T>> traversal(BTTraversal order)
+    {
+        DynamicArray<T> *ret = NULL;
+        LinkQueue<BTreeNode<T> *> queue;
+        switch(order)
+        {
+        case PreOder:
+            preOrderTraversal(root(), queue);
+            break;
+        case InOder:
+            inOrderTraversal(root(), queue);
+            break;
+        case PostOder:
+            PostOrderTraversal(root(), queue);
+            break;
+        default:
+            THROW_EXCEPTION(InvalidParameterException, "Parameter order is invalid...");
+        }
+
+        ret = new DynamicArray<T>(queue.length());
+        if( ret != NULL)
+        {
+            for(int i=0; i<ret->length(); i++, queue.remove())
+            {
+                ret->set(i, queue.front()->value);
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException,"No Memory to alloc...");
+        }
+
+        return ret;
+    }
 
     ~BTree()
     {
