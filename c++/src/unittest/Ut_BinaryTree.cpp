@@ -158,6 +158,84 @@ void delOdd2(BTreeNode<T>* node)
     }
 }
 
+/* @pre: 中序遍历时，前驱结点的指针*/
+template <typename T>
+BTreeNode<T>* inOrderThread(BTreeNode<T>* node, BTreeNode<T>* &pre)
+{
+    if(node != NULL)
+    {
+        inOrderThread(node->left, pre);
+
+        node->left = pref;
+        if(pre != NULL)
+        {
+            pref->right = node;
+        }
+
+        pre = node;
+
+        inOrderThread(node->right, pre);
+    }
+}
+/* 具体的线索化函数 */
+template <typename T>
+BTreeNode<T>* inOrderThread_Impl1(BTreeNode<T>* node)
+{
+    BTreeNode<T>* pre = NULL;
+
+    inOrderThread(node, pre);
+    while( (node != NULL) && (node->left != NULL))   //向前循环查找，头结点
+    {
+        node = node->left;
+    }
+
+    return node;
+}
+
+/* 中序遍历的结点次序正好是结点的水平次序 */
+/* @node: 根节点， 也是中序访问的结点
+*  @head: 转换成功后，指向双向链表的首结点
+*  @tail: 转换成功后，指向双向链表的尾结点
+*/
+template <typename T>
+BTreeNode<T>* inOrderThread(BTreeNode<T>* node, BTreeNode<T>* &head, BTreeNode<T>* &tail)
+{
+    if(node != NULL)
+    {
+        BTreeNode<T> *h = NULL;
+        BTreeNode<T> *t = NULL;
+        inOrderThread(node->left, h, t);
+
+        node->left = t;
+        if(t != NULL)
+        {
+            t->right = node;
+        }
+
+        head = (h != NULL) ? h:node; //左子树最左边的指针
+
+        inOrderThread(node->right, h, t);
+        node->right = t;
+        if(h != NULL)
+        {
+            t->left = node;
+        }
+
+        tail = (t != NULL) ? t:node; //右子树最右边的指针
+    }
+}
+template <typename T>
+BTreeNode<T>* inOrderThread_Impl2(BTreeNode<T>* node)
+{
+    BTreeNode<T>* head = NULL;
+    BTreeNode<T>* tail = NULL;
+
+    inOrderThread(node, head, tail);
+    inOrderThread(node, head, tail);
+
+    return head;
+}
+
 int Ut_BinaryTree(void)
 {
     BTreeNode<int>* ns = createTree<int>();
