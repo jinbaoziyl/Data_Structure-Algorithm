@@ -258,6 +258,33 @@ protected:
             }
         }
     }
+
+    BTreeNode<T>* connect(LinkQueue<BTreeNode<T>*> &queue)
+    {
+        BTreeNode<T>* ret = NULL;
+        if(queue.lentgh() > 0)
+        {
+            ret = queue.front();
+            BTreeNode<T> *slider = queue.front();
+            queue.remove();
+
+            slider->left = NULL;
+
+            while(queue.length())
+            {
+                slider->right = queue.front();
+                queue.front()->left = slider;
+
+                slider = queue.front();
+                queue.remove();
+            }
+
+            slider->right = NULL; //双向链表最后的指针指向空
+
+        }
+
+        return ret;
+    }
 public:
     bool insert(TreeNode<T> *node)
     {
@@ -416,6 +443,20 @@ public:
         {
             THROW_EXCEPTION(InvalidParameterException, "Parameter order is invalid...");    
         }
+    }
+
+    BTreeNode<T>* thread(BTTraversal order)
+    {
+        BTreeNode<T>* ret = NULL;
+        LinkQueue<BTreeNode<T> *>queue;
+
+        traversal(order,queue);
+        connect(queue);
+
+        this->m_root = NULL;
+        m_queue.clear();  //线索化完成后，清空树
+
+        return ret;
     }
     ~BTree()
     {
