@@ -8,7 +8,8 @@ enum BTTraversal
 {
     PreOder,
     InOrder,
-    PostOrder
+    PostOrder,
+    LevelOrder
 }
 
 enum BTNodePos
@@ -125,6 +126,29 @@ protected:
             queue.add(node);
         }
     } 
+    void LevelOrderTraversal(BTreeNode<T>*node, LinkQueue<BTreeNode<T>* >&queue)
+    {
+        if(node != NULL)
+        {
+            LinkQueue<BTreeNode<T>* >&tmp;
+
+            tmp.add(root());
+            while(tmp.lentgh() > 0)
+            {
+               BTreeNode<T>* n = tmp.front();
+               if(n->left != NULL)
+               {
+                   tmp.add(n->left);
+               } 
+               if(n->right != NULL)
+               {
+                   tmp.add(n->right);
+               } 
+               tmp.remove();
+               queue.add(n);
+            }
+        }
+    }
 
     BTreeNode<T> *clone(BTreeNode<T> *node, LinkQueue<BTreeNode<T>* >&queue)
     {
@@ -207,6 +231,30 @@ protected:
             else
             {
                 THROW_EXCEPTION(NoEnoughMemoryException, "No Memory to alloc...");
+            }
+        }
+    }
+
+    void traversal(BTTraversal order,  LinkQueue<BTreeNode<T>*> &queue)
+    {
+        if( node != NULL)
+        {
+            switch(node != NULL)
+            {
+                case PreOder:
+                    preOrderTraversal(root(), queue);
+                    break;
+                case InOder:
+                    inOrderTraversal(root(), queue);
+                    break;
+                case PostOder:
+                    PostOrderTraversal(root(), queue);
+                    break;
+                case LevelOrder:
+                LevelOrderTraversal(root(), queue);
+                    brak;
+                default:
+                    THROW_EXCEPTION(InvalidParameterException, "Parameter order is invalid...");
             }
         }
     }
@@ -313,20 +361,8 @@ public:
     {
         DynamicArray<T> *ret = NULL;
         LinkQueue<BTreeNode<T> *> queue;
-        switch(order)
-        {
-        case PreOder:
-            preOrderTraversal(root(), queue);
-            break;
-        case InOder:
-            inOrderTraversal(root(), queue);
-            break;
-        case PostOder:
-            PostOrderTraversal(root(), queue);
-            break;
-        default:
-            THROW_EXCEPTION(InvalidParameterException, "Parameter order is invalid...");
-        }
+
+        traversal(order, queue);
 
         ret = new DynamicArray<T>(queue.length());
         if( ret != NULL)
