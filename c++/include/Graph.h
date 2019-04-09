@@ -27,7 +27,10 @@ public:
     virtual int eCount() = 0;
     virtual int oD(int i) = 0;
     virtual int ID(int i) = 0;
-    virtual int TD(int i);
+    virtual int TD(int i)
+    {
+        return OD(i) + ID(i);
+    }
 };
 
 }
