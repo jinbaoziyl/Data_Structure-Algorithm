@@ -12,6 +12,7 @@ class GTree : public Tree
 {
 protected:
     LinkQueue<T> m_queue;
+
     GTreeNode<T>* find(GTreeNode<T>*node, const T& val) const
     {
         GTreeNode<T>*ret = NULL;
@@ -243,6 +244,7 @@ public:
         else
         {
             remove(node, ret);
+            m_queue.clear();
         }
         return ret;
     }
@@ -257,6 +259,7 @@ public:
         else
         {
             remove(dynamic_cast<GTreeNode *>(node), ret);
+            m_queue.clear();
         }
         return ret;
     }
