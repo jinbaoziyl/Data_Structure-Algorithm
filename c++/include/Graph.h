@@ -121,8 +121,78 @@ public:
             THROW_EXCEPTION(InvalidParameterException, "Index i is invalid...");
         }
     }
-};
 
+    /*
+    * @i: 起始顶点编号
+    */
+    SharePointer< Array<int> > DFS(int i)
+    {
+        DynamicArray<int>* ret = NULL;
+
+        if((i>=0) && (i<vCount()))
+        {
+            LinkStack<int> s;
+            LinkQueue<int> r;
+            DynamicArray<bool> visited(vCount());
+            for(int i=0; i<vCount(); i++)
+            {
+                visited[i] = false;
+            }
+
+            s.push(i); //先把第一个顶点压栈
+            while(s.size() > 0)
+            {
+                int v = s.top();
+                s.pop();
+                if(!visited[v])
+                {
+                    SharePointer<Array<int> >aj = getAdjacent(v);
+                    for(int j=0; j<aj->length();j++)
+                    {
+                        q.push((*aj)[j]);
+                    }
+
+                    r.add(v);
+                    visited[v] = true;
+                }
+            }
+
+            ret = toArray(r);
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidParameterException, "Index i is invalid...");
+        }
+    } 
+}；
+/* 递归版深度优先
+*  以二叉树先序遍历的思想，进行图的遍历
+* @g: 待遍历的图结构
+* @i: 起始顶点
+*/  
+template <typename V, typename E>
+void DFS(Graph<V, E>&g , int i, Array<bool>& visited)
+{
+    if((i>=0) && (i<vCount()))
+    {
+        cout << i << endl; //访问当前顶点
+        visited[i] = true;
+
+        SharePointer< Array<int> > aj = g.getAdjacent(i);
+
+        for(int j=0; j<aj->length(); j++)
+        {
+            if(!visited[(*aj)[j]])
+            {
+                DFS(g, (*aj)[j], visited); //递归
+            }
+        } 
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidParameterException, "Index i is invalid...");
+    }  
 }
 
+};
 #endif //__GRAPH_H__
