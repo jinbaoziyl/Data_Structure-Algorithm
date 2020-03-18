@@ -59,7 +59,7 @@ boolean dfs(int maze[][], int x, int y)
 题目描述:
 输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。
 路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径
-
+2. 剑指offer 66-机器人的运动范围
 
 ## 3.2 BFS 广度优先搜索算法
 广度优先搜索一般用来解决最短路径的问题
@@ -70,3 +70,34 @@ boolean dfs(int maze[][], int x, int y)
 同时从起始点和终点开始进行的广度优先搜索称为双端BFS
 双端BFS可以大大地提高搜索的效率
 可以利用队列的数据结构实现BFS算法
+
+BFS算法总体框架
+```
+void bfs(int [][]maze, int x, int y)
+{
+    Queue<Integer[]> queue = new LinkedList<>();    // step1: 创建队列，加入起始点
+    queue.add(new Integer[] {x, y});
+
+    while(!queue.isEmpty())                         // step2: 队列不为空，一直循环下去
+    {
+        Integer[] pos = queue.poll();               // step3: 取出当前处理的点
+        x = pos[0]; y = pos[1];
+
+        for(int d = 0; d < 4; d++ )                 // step4: 在可能的方向上进行BFS搜索
+        {
+            int i = x + dx(d), j = y + dy(d);
+
+            if(isSafe(maze, i, j))                   // step5: 判断一下该方向的点是否已经被访问过
+            {
+                maze[i][j] = maze[x][y] + 1;          // step6: 被访问过，则纪录步数，并加入队列
+                queue.add(new Integer[] {i,j});
+
+                if(i == B[0] && j == B[1])  return; // step7: 找到目的地立即返回
+            }
+        }
+    }
+}
+```
+
+经典案例:
+1.剑指offer 65.矩阵中的路径
