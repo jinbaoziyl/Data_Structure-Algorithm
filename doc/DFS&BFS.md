@@ -100,4 +100,5 @@ void bfs(int [][]maze, int x, int y)
 ```
 
 经典案例:
-1.剑指offer 65.矩阵中的路径
+1.剑指offer 从上往下打印二叉树
+2.剑指offer 65.矩阵中的路径
