@@ -234,6 +234,9 @@ def calculate(s: str) -> int:
             c = s.pop(0)
             if c.isdigit():
                 num = 10 * num + int(c)
+            # 遇到左括号开始递归
+            if c == '(':
+                num = helper(s)
 
             if (not c.isdigit() and c != ' ') or len(s) == 0:
                 if sign == '+':
@@ -247,7 +250,9 @@ def calculate(s: str) -> int:
                     stack[-1] = int(stack[-1] / float(num))                    
                 num = 0
                 sign = c
-
+            # 遇到右括号结束递归
+            if c == ')':
+                break
         return sum(stack)
     # 需要把字符串转成列表方便操作
     return helper(list(s))
