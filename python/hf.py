@@ -146,10 +146,10 @@ def MergeIntervalMinDel(vlist):
 
     return len(vlist) - count
 
-vlist = [[1,2], [2,3], [3,4], [1,3]]
-# vlist = [[1,2], [2,3]]
-results = MergeIntervalMinDel(vlist)
-print(results)
+# vlist = [[1,2], [2,3], [3,4], [1,3]]
+# # vlist = [[1,2], [2,3]]
+# results = MergeIntervalMinDel(vlist)
+# print(results)
 
 # 火星字典
 # 核心思想: 对有向图进行拓扑排序
@@ -212,13 +212,47 @@ def alienOrder(words):
             val = topologicalSort(adList, key, visited, loop, stack)
             if not val:
                 return ''
-                
+
     res = ''
     for i in range(len(stack)-1, -1, -1):
         res += stack[i]
 
     return res
 
-words = ['wrt', 'wrf', 'er','ett','rftt']
-res = alienOrder(words)
+# words = ['wrt', 'wrf', 'er','ett','rftt']
+# res = alienOrder(words)
+# print(res)
+
+# 基本计算器
+def calculate(s: str) -> int: 
+    def helper(s: list) -> int:
+        stack = []
+        sign = '+'
+        num = 0
+
+        while len(s) > 0:
+            c = s.pop(0)
+            if c.isdigit():
+                num = 10 * num + int(c)
+
+            if (not c.isdigit() and c != ' ') or len(s) == 0:
+                if sign == '+':
+                    stack.append(num)
+                elif sign == '-':
+                    stack.append(-num)
+                elif sign == '*':
+                    stack[-1] = stack[-1] * num
+                elif sign == '/':
+                    # python 除法向 0 取整的写法
+                    stack[-1] = int(stack[-1] / float(num))                    
+                num = 0
+                sign = c
+
+        return sum(stack)
+    # 需要把字符串转成列表方便操作
+    return helper(list(s))
+
+res = calculate('6-4/2')
 print(res)
+
+
