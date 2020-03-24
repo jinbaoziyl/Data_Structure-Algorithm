@@ -281,18 +281,47 @@ def partitionList(head, pivot):
 
     return list1
 
+# arr = [9,0,4,3,3,5,1]
+# linkedlist = LinkedList()
+# for s in arr:
+#     linkedlist.addNode(s)
+# # linkedlist.printList()
 
+# reslist = partitionList(linkedlist.head.next, 3)
+# reslist.printList()
 
+# 将单链表的每K个节点之间逆序
+# 解法1: 最简单的办法，利用栈来辅助，每K个节点入栈就把这K个节点出栈连接成一个链表，之后剩余再在进栈
+#        这种做法的额外空间复杂度是O(K)
+# 解法2: 递归的办法，首先将前k个结点与后面的所有结点分割开，成为两个链表
+#        将前k个链表逆序,  然后将后面的链表当成递归的子问题
+#        最后将两个结果组合在一起
+def reverseKNodes(head, k):
+    if head is None or head.next is None:
+        return head
+    cur = head
+    while cur is not None and k:
+        cur = cur.next
+        k -= 1
+    
+    # 分割成两个链表
+    if cur == None:
+        return head
+    tmp = cur.next
+    cur.next = None
 
-arr = [9,0,4,3,3,5,1]
-linkedlist = LinkedList()
-for s in arr:
-    linkedlist.addNode(s)
-# linkedlist.printList()
+    # 把k个结点进行翻转
+    newHead = ReverseList(head)
+    newTemp = reverseKNodes(tmp,k)
 
-reslist = partitionList(linkedlist.head.next, 3)
-reslist.printList()
+    # 组合两部分结果
+    mergeNode = newHead
+    while mergeNode is not None:
+        mergeNode = mergeNode.next
+    mergeNode.next = newTemp
 
+    return newHead
+    
 
 
 
