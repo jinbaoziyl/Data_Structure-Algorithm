@@ -321,7 +321,44 @@ def reverseKNodes(head, k):
     mergeNode.next = newTemp
 
     return newHead
-    
+
+# 将搜索二叉树转换成双向链表
+# 思路:
+# 方法1: 如果用一个队列来辅助的话，采用中序遍历的方法，
+#        把二叉树的节点全部放进队列，之后在逐一弹出来连接成双向链表
+# 方法2: 递归实现, 首先对左右子树分别进行转双向链表操作， 最后整合左右子树和root这三者的关系
+#        组合在一起需要考虑多种情况
+# public static Node2 conver(Node2 head) {
+#     if (head == null) {
+#         return head;
+#     }
+#     Node2 leftE = conver(head.left);
+#     Node2 rightE = conver(head.right);
+#     Node2 leftB = leftE != null ? leftE.right : null;
+#     Node2 rightB = rightE != null ? rightE.right : null;
+#     if (leftE != null && rightE != null) {
+#         leftE.right = head;
+#         head.left = leftE;
+#         head.right = rightB;
+#         rightB.left = head;
+#         rightE.right = leftB;
+#         return rightE;
+#     } else if (leftE != null) {
+#         leftE.right = head;
+#         head.left = leftE;
+#         head.right = leftB;
+#         return head;
+#     } else if (rightE != null) {
+#         head.right = rightB;
+#         rightB.left = head;
+#         rightE.right = head;
+#         return rightE;
+#     } else {
+#         head.right = head;
+#         return head;
+#     }
+# }
+  
 
 
 
