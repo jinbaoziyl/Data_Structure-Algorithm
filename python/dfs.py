@@ -85,3 +85,57 @@ def movingCount(self, threshold, rows, cols):
                 stack.append([[cur_x - 1, cur_y], num + 1])
             else:
                 stack.append([[cur_x + 1, cur_y], num + 1])
+
+
+# 迷宫问题(华为机考)
+import sys
+# @x,y  终点坐标
+def maze_dfs(matrix, x, y):
+    stack = []                  # stack数据结构作用
+    dir = [[1,0], [0,1]]        # 定义两个方向横着或者竖着走
+    visited = [[0]*(y+1) for _ in range(x+1)] #标记是否访问过
+
+    #将起始点放入栈中
+    stack.append((0,0))
+    visited[0][0] = 1
+
+    while stack:
+        flag = False    #标记是否找到方向
+        pek = stack[-1] #获得栈顶元素
+
+        if pek[0] == x and pek[1] == y:
+            break
+        else:
+            for i in range(2): # 两个方向搜索
+                tmp_x = pek[0] + dir[i][0]
+                tmp_y = pek[1] + dir[i][1]
+                # 找到邻居位置, 判断合不合法
+                if tmp_x>=0 and tmp_x<=x and tmp_y>=0 and tmp_y<=y and matrix[tmp_x][tmp_y]==0 and visited[tmp_x][tmp_y]==0:
+                    stack.append((tmp_x,tmp_y))
+                    visited[tmp_x][tmp_y] = 1
+                    flag = True  #找到下一个方向
+                    break
+            if flag:
+                continue
+            # 如果两个方向都找不到， 那么出栈
+            stack.pop()
+    for ele in stack:
+        print("(%d,%d)" %(ele[0], ele[1]))
+         
+
+def main():
+    while True:
+        matrix_info = sys.stdin.readline().strip()
+        if matrix_info == '':
+            break
+        row, col = matrix_info.split()
+
+        matrix = []
+        for i in range(int(row)):
+            matrix.append(list(map(int, sys.stdin.readline().strip().split())))
+
+        maze_dfs(matrix, int(row)-1, int(col)-1)
+
+# if __name__ == '__main__':
+#     main()
+    
