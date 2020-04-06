@@ -90,3 +90,33 @@ def bit_num(a):
 
 vstr = input()
 print(bit_num(int(vstr)))
+
+# 华为机试-2020/4/6
+import sys
+import re
+def sort_words(sword):
+    l = []
+    temp = sword.split(" ")
+    for i in temp:
+        if i.lower() not in [j.lower() for j in l]:
+            l.append(i)
+    return " ".join(sorted(l, key=str.lower))
+
+def main():
+    while True:
+        words = sys.stdin.readline()
+        if len(words) <= 255:
+            pat = re.compile(r"^[a-zA-Z\s]{0,255}$")
+            if pat.match(words):
+                #正确输入
+                test = sort_words(words)
+                print("%s" %test)
+                break
+            else:
+                print("Input words invalid, re-Input again!")
+        else:
+            print("Input words' length should less then 255!")
+
+
+if __name__ == '__main__':
+    main()
