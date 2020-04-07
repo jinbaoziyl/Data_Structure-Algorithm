@@ -88,8 +88,8 @@ def bit_num(a):
     
     return count+1
 
-vstr = input()
-print(bit_num(int(vstr)))
+# vstr = input()
+# print(bit_num(int(vstr)))
 
 # 华为机试-2020/4/6
 import sys
@@ -117,6 +117,27 @@ def main():
         else:
             print("Input words' length should less then 255!")
 
+# if __name__ == '__main__':
+#     main()
 
-if __name__ == '__main__':
-    main()
+# 有效的字母异位词
+def EccentricLetters(word1, word2):
+    assert isinstance(word1,str)
+    assert isinstance(word2,str)
+
+    lut = [0]*256
+    for i in range(len(word1)):
+        lut[ord(word1[i])] += 1
+
+    for j in range(len(word2)):
+        lut[ord(word2[j])] -= 1
+    
+    for ele in lut:
+        if ele != 0:
+            return False
+    return True
+
+words = input()
+vword = words.strip().split()
+print(EccentricLetters(vword[0], vword[1]))
+
